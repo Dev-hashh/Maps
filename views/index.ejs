@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Leaflet.js Test Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 500px;
+            width: 80%;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Leaflet.js Test Map</h1>
+    <form action="/" method="POST">
+        <input type="text" name="location" placeholder="Enter location" required>
+        <button type="submit">Search</button>
+    </form>
+
+    <% if (data) { %>
+        <div id="map"></div>
+        <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+        <script>
+            const lat = "<%- data.lat %>";
+            const lon = "<%- data.lon %>";
+            const displayName = "<%- data.display_name %>";
+
+            const map = L.map('map').setView([lat, lon], 15);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(map);
+
+            L.circle([lat, lon], {
+                color: 'blue',
+                radius: 5000 // meters
+            }).addTo(map);
+
+            L.control.minimap(L.tileLayer('...')).addTo(map);
+            
+            L.marker([lat, lon]).addTo(map)
+                .bindPopup(`<b>${displayName}</b>`)
+                .openPopup();
+
+
+        </script>
+        <% } %>
+</body>
+
+</html>
